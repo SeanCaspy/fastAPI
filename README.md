@@ -2,7 +2,7 @@
 
 This repository is part of my learning journey to deepen my understanding of modern Python web development using **FastAPI**.
 
-## 🎯 Project Goal
+##  Project Goal
 
 To explore and practice FastAPI in order to:
 - Improve my backend development skills
