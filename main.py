@@ -1,9 +1,22 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
+from routes import auth
+import bcrypt
 
 app = FastAPI()
 
 users = []
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # אפשר לאפשר לכתובות ספציפיות במקום כוכבית בעתיד
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth.router)
 
 class User(BaseModel):
     name: str  = Field( min_length=1)
