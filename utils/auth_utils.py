@@ -6,7 +6,15 @@ from datetime import datetime, timedelta, timezone
 
 SECRET_KEY = "some_super_secret_key"
 ALGORITHM = "HS256"
-ACCESS_TOKENN_TIME = 30
+ACCESS_TOKENN_TIME = 0.33
+REFRSH_TOKEN_TIME = 30 * 24 * 7
+
+def create_refresh_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(minutes=REFRSH_TOKEN_TIME)
+    to_encode.update({"exp": expire})
+    refresh_token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return refresh_token
 
 def create_access_token(data: dict):
     to_encode = data.copy()
