@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth
+from routes import auth, posts
 import bcrypt
 from database import Base, engine
 import models
@@ -21,6 +21,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(posts.router)
 
 Base.metadata.create_all(bind=engine)
 
