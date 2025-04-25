@@ -2,9 +2,12 @@ from jose import jwt, JWTError
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta, timezone
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-SECRET_KEY = "some_super_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKENN_TIME = 0.33
 REFRSH_TOKEN_TIME = 30 * 24 * 7
