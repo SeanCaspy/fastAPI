@@ -2,45 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Post</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    
+    button:hover {
+      background-color: #45a049;
+    }
+    
+    .nav-links {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .nav-links a {
+      color: #4CAF50;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
+  <h1>Create New Post</h1>
+  
+  <form id="createPostForm">
+    <input type="text" id="title" placeholder="Title" required>
+    <textarea id="content" placeholder="Write your post content here..." required></textarea>
+    <button type="submit">Create Post</button>
+  </form>
+  
+  <div class="nav-links">
+    <a href="index.html">Back to Posts</a>
+  </div>
 
-<h1>Create New Post</h1>
-
-<form id="createPostForm">
-  <input type="text" id="title" placeholder="Title" required>
-  <input type="text" id="content" placeholder="Content" required>
-  <button type="submit">Create Post</button>
-</form>
-
-<script>
-const accessToken = localStorage.getItem('accessToken');
-if (!accessToken) {
-  window.location.href = "login.html";
-}
-
-document.getElementById('createPostForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const title = document.getElementById('title').value;
-  const content = document.getElementById('content').value;
-
-  const response = await fetch('http://127.0.0.1:8000/posts', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
-    body: JSON.stringify({ title, content })
-  });
-
-  const data = await response.json();
-
-  if (response.ok) {
-    alert('Post created!');
-    window.location.href = "index.html";
-  } else {
-    alert('Post creation failed: ' + data.detail);
-  }
-});
-</script>
-
+  <script>
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      window.location.href = "login.html";
+    }
+    
+    document.getElementById('createPostForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      
+      try {
+        const response = await fetch('http://127.0.0.1:8000/posts', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${accessToken}` 
+          },
+          body: JSON.stringify({ title, content })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('Post created successfully!');
+          window.location.href = "index.html";
+        } else {
+          alert('Post creation failed: ' + data.detail);
+        }
+      } catch (error) {
+        alert('Error creating post: ' + error.message);
+      }
+    });
+  </script>
 </body>
 </html>

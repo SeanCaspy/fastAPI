@@ -2,42 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Delete Post</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    button {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    
+    button:hover {
+      background-color: #d32f2f;
+    }
+    
+    .nav-links {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .nav-links a {
+      color: #4CAF50;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    
+    .warning {
+      color: #f44336;
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <h1>Delete Post</h1>
+  
+  <form id="deletePostForm">
+    <p class="warning">Warning: This action cannot be undone!</p>
+    <input type="number" id="deletePostId" placeholder="Post ID" required>
+    <button type="submit">Delete Post</button>
+  </form>
+  
+  <div class="nav-links">
+    <a href="index.html">Back to Posts</a>
+  </div>
 
-<h1>Delete Post</h1>
-
-<form id="deletePostForm">
-  <input type="number" id="deletePostId" placeholder="Post ID" required>
-  <button type="submit">Delete</button>
-</form>
-
-<script>
-const accessToken = localStorage.getItem('accessToken');
-if (!accessToken) {
-  window.location.href = "login.html";
-}
-
-document.getElementById('deletePostForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const postId = document.getElementById('deletePostId').value;
-
-  const response = await fetch(`http://127.0.0.1:8000/post/${postId}`, {
-    method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${accessToken}` }
-  });
-
-  const data = await response.json();
-
-  if (response.ok) {
-    alert('Post deleted!');
-    window.location.href = "index.html";
-  } else {
-    alert('Delete failed: ' + data.detail);
-  }
-});
-</script>
-
+  <script>
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      window.location.href = "login.html";
+    }
+    
+    document.getElementById('deletePostForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Add confirmation before deleting
+      if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+        return;
+      }
+      
+      const postId = document.getElementById('deletePostId').value;
+      
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/posts/${postId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('Post deleted successfully!');
+          window.location.href = "index.html";
+        } else {
+          alert('Delete failed: ' + data.detail);
+        }
+      } catch (error) {
+        alert('Error deleting post: ' + error.message);
+      }
+    });
+  </script>
 </body>
 </html>

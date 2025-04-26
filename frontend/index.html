@@ -1,30 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #3a0ca3;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9a8;
+            --warning-color: #ff9f1c;
+            --danger-color: #e63946;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            background-image: radial-gradient(#e0e8ff 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 2rem;
+            width: 100%;
+            box-shadow: var(--box-shadow);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: white;
+            border-radius: 10px;
+        }
+        
+        nav {
+            background-color: white;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            margin: 2rem auto;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            max-width: 800px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        nav a:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        nav a i {
+            margin-right: 0.5rem;
+        }
+        
+        #logoutButton {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        #logoutButton:hover {
+            background-color: #d62828;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(230, 57, 70, 0.3);
+        }
+        
+        #logoutButton i {
+            margin-right: 0.5rem;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 1rem;
+            }
+            
+            nav a, #logoutButton {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome to the Project!</h1>
-
-<nav>
-  <a href="/register.html">Register</a> |
-  <a href="/login.html">Login</a> |
-  <a href="/create_post.html">Create Post</a> |
-  <a href="/update_post.html">Update Post</a> |
-  <a href="/delete_post.html">Delete Post</a> |
-  <button id="logoutButton">Logout</button>
-</nav>
-
-<script>
-const accessToken = localStorage.getItem('accessToken');
-
-document.getElementById('logoutButton').addEventListener('click', () => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-  window.location.href = "login.html";
-});
-</script>
-
+    <header>
+        <div class="container">
+            <h1>Welcome to the Project!</h1>
+            <p>Manage your posts efficiently and easily</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <nav>
+            <a href="/register.html"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="/login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="/create_post.html"><i class="fas fa-plus-circle"></i> Create Post</a>
+            <a href="/update_post.html"><i class="fas fa-edit"></i> Update Post</a>
+            <a href="/delete_post.html"><i class="fas fa-trash-alt"></i> Delete Post</a>
+            <button id="logoutButton"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </nav>
+        
+        <div class="main-content">
+            <h2>Welcome to Your Dashboard</h2>
+            <p>Use the navigation above to manage your posts</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-plus-circle"></i> Create</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Create new posts and share your thoughts with the world.</p>
+                        <a href="/create_post.html" class="btn">Create Now</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-edit"></i> Update</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Edit and update your existing posts anytime.</p>
+                        <a href="/update_post.html" class="btn">Update Posts</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trash-alt"></i> Delete</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Remove posts that are no longer needed.</p>
+                        <a href="/delete_post.html" class="btn">Delete Posts</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Your Project. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        const accessToken = localStorage.getItem('accessToken');
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = "login.html";
+        });
+    </script>
 </body>
 </html>
