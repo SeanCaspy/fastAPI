@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Post</title>
+</head>
+<body>
+
+<h1>Update Post</h1>
+
+<form id="updatePostForm">
+  <input type="number" id="postId" placeholder="Post ID" required>
+  <input type="text" id="newTitle" placeholder="New Title" required>
+  <input type="text" id="newContent" placeholder="New Content" required>
+  <button type="submit">Update Post</button>
+</form>
+
+<script>
+const accessToken = localStorage.getItem('accessToken');
+if (!accessToken) {
+  window.location.href = "login.html";
+}
+
+document.getElementById('updatePostForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const postId = document.getElementById('postId').value;
+  const title = document.getElementById('newTitle').value;
+  const content = document.getElementById('newContent').value;
+
+  const response = await fetch(`http://127.0.0.1:8000/put/${postId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+    body: JSON.stringify({ title, content })
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    alert('Post updated!');
+    window.location.href = "index.html";
+  } else {
+    alert('Update failed: ' + data.detail);
+  }
+});
+</script>
+
+</body>
+</html>

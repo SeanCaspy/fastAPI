@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home Page</title>
+</head>
+<body>
+<h1>Welcome to the Project!</h1>
+
+<nav>
+  <a href="/register.html">Register</a> |
+  <a href="/login.html">Login</a> |
+  <a href="/create_post.html">Create Post</a> |
+  <a href="/update_post.html">Update Post</a> |
+  <a href="/delete_post.html">Delete Post</a> |
+  <button id="logoutButton">Logout</button>
+</nav>
+
+<script>
+const accessToken = localStorage.getItem('accessToken');
+
+document.getElementById('logoutButton').addEventListener('click', () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  window.location.href = "login.html";
+});
+</script>
+
+</body>
+</html>

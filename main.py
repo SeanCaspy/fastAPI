@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from routes import auth, posts
-import bcrypt
 from database import Base, engine
-import models
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
@@ -25,3 +25,5 @@ app.include_router(posts.router)
 
 Base.metadata.create_all(bind=engine)
 
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

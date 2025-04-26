@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete Post</title>
+</head>
+<body>
+
+<h1>Delete Post</h1>
+
+<form id="deletePostForm">
+  <input type="number" id="deletePostId" placeholder="Post ID" required>
+  <button type="submit">Delete</button>
+</form>
+
+<script>
+const accessToken = localStorage.getItem('accessToken');
+if (!accessToken) {
+  window.location.href = "login.html";
+}
+
+document.getElementById('deletePostForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const postId = document.getElementById('deletePostId').value;
+
+  const response = await fetch(`http://127.0.0.1:8000/post/${postId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    alert('Post deleted!');
+    window.location.href = "index.html";
+  } else {
+    alert('Delete failed: ' + data.detail);
+  }
+});
+</script>
+
+</body>
+</html>
