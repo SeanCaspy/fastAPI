@@ -32,13 +32,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 def verify_token(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        user_id: int = payload.get("user_id")
+        if user_id is None:
             raise credentials_exception
-        return username
+        return user_id
     except JWTError:
         raise credentials_exception
-    
 
 credentials_exception = HTTPException(
     status_code=401,

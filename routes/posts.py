@@ -7,8 +7,8 @@ from utils.auth_utils import verify_token
 router = APIRouter()
 
 @router.post("/posts")
-def create_post(post: PostCreate, db: Session = Depends(get_db), username: str = Depends(verify_token)):
-    user = db.query(UserDB). filter(UserDB.username == username).first()
+def create_post(post: PostCreate, db: Session = Depends(get_db), user_id: int = Depends(verify_token)):
+    user = db.query(UserDB). filter(UserDB.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="user not found")
     new_post = PostDB(title=post.title, content=post.content, owner_id=user.id)
@@ -28,3 +28,34 @@ def get_post(post_id: int, db: Session = Depends(get_db)):
     if not post:
         raise HTTPException(status_code=404, detail="post not found")
     return post
+
+@router.put("/posts/{post_id}")
+def update_post(post_id: int, post_update: PostCreate, db: Session = Depends(get_db), user_id: int = Depends(verify_token)):
+    post = db.query(PostDB).filter(PostDB.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    user = db.query(UserDB).filter(UserDB.id == post.owner_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    if post.owner_id != user_id:
+        raise HTTPException(status_code=403, detail="Only owner can update post")
+    
+    post.title = post_update.title
+    post.content = post_update.content
+    db.commit()
+    db.refresh(post)
+
+    return {"message": "Post updated", "post": {"id": post.id, "title": post.title, "content": post.content}}
+
+@router.delete("/posts/{post_id}")
+def delete_post(post_id: int, db: Session=Depends(get_db), user_id: int = Depends(verify_token)):
+    post = db.query(PostDB).filter(PostDB.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="post not found")
+    if post.owner_id != user_id:
+        raise HTTPException(status_code=405, detail="only owner can delete post")
+    db.delete(post)
+    db.commit()
+    return{"message":"post deleted"}

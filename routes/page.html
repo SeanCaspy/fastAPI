@@ -2,94 +2,92 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FastAPI Authentication Test</title>
+  <title>FastAPI Client Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f0f0f0; }
+    h2 { margin-top: 30px; }
+    form, button { margin-bottom: 20px; }
+    input { margin: 5px; padding: 8px; }
+    button { padding: 8px 16px; }
+    #log { margin-top: 20px; background: #fff; padding: 20px; border: 1px solid #ccc; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
 </head>
 <body>
 
-<h1>🔐 FastAPI Authentication System</h1>
+<h1>FastAPI Client Test</h1>
 
-<!-- Registration Form -->
 <h2>Register</h2>
 <form id="registerForm">
   <input type="text" id="regUsername" placeholder="Username" required>
   <input type="password" id="regPassword" placeholder="Password" required>
   <button type="submit">Register</button>
 </form>
-<p id="registerMessage"></p>
 
-<!-- Login Form -->
 <h2>Login</h2>
 <form id="loginForm">
   <input type="text" id="username" placeholder="Username" required>
   <input type="password" id="password" placeholder="Password" required>
   <button type="submit">Login</button>
 </form>
-<p id="loginMessage"></p>
 
-<!-- Protected Resource Access -->
-<h2>Protected Access</h2>
+<h2>Protected Area</h2>
 <button id="accessProtected">Access Protected</button>
-<p id="protectedMessage"></p>
 
-<!-- Refresh Token -->
-<h2>Refresh Access Token</h2>
-<button id="refreshToken">Refresh Access Token</button>
-<p id="refreshMessage"></p>
 <h2>Create Post</h2>
 <form id="createPostForm">
   <input type="text" id="postTitle" placeholder="Title" required>
-  <textarea id="postContent" placeholder="Content"></textarea>
+  <input type="text" id="postContent" placeholder="Content" required>
   <button type="submit">Create Post</button>
 </form>
 
+<h2>Update Post</h2>
+<form id="updatePostForm">
+  <input type="number" id="updatePostId" placeholder="Post ID" required>
+  <input type="text" id="updateTitle" placeholder="New Title" required>
+  <input type="text" id="updateContent" placeholder="New Content" required>
+  <button type="submit">Update Post</button>
+</form>
+
+<h2>Delete Post</h2>
+<form id="deletePostForm">
+  <input type="number" id="deletePostId" placeholder="Post ID" required>
+  <button type="submit">Delete Post</button>
+</form>
+
+<h2>Refresh Token</h2>
+<button id="refreshToken">Refresh Access Token</button>
+
+<div id="log"></div>
+
 <script>
-  document.getElementById('createPostForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const title = document.getElementById('postTitle').value;
-  const content = document.getElementById('postContent').value;
-
-  const response = await fetch('http://127.0.0.1:8000/posts', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify({ title, content })
-  });
-
-  const data = await response.json();
-  console.log('Create Post:', data);
-
-  if (response.ok) {
-    alert(`Post created with ID: ${data.post_id}`);
-  } else {
-    alert(`Error creating post: ${data.detail || 'Unknown error'}`);
-  }
-});
 let accessToken = "";
 let refreshToken = "";
 
-// Registration
+function logMessage(message, type = 'success') {
+  const logDiv = document.getElementById('log');
+  const newMessage = document.createElement('div');
+  newMessage.className = type;
+  newMessage.textContent = message;
+  logDiv.appendChild(newMessage);
+}
+
+// Register
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const username = document.getElementById('regUsername').value;
   const password = document.getElementById('regPassword').value;
-  const msg = document.getElementById('registerMessage');
-
   const response = await fetch('http://127.0.0.1:8000/register', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
   });
-
   const data = await response.json();
-
   if (response.ok) {
-    msg.innerText = "✅ Registered successfully!";
-    msg.style.color = "green";
+    logMessage(`✅ Registered: ${data.message}`);
   } else {
-    msg.innerText = `❌ Registration failed: ${data.detail}`;
-    msg.style.color = "red";
+    logMessage(`❌ Register failed: ${data.detail}`, 'error');
   }
 });
 
@@ -98,66 +96,102 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-  const msg = document.getElementById('loginMessage');
-
   const response = await fetch('http://127.0.0.1:8000/login', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
   });
-
   const data = await response.json();
-
   if (response.ok) {
     accessToken = data.access_token;
     refreshToken = data.refresh_token;
-    msg.innerText = "✅ Logged in successfully!";
-    msg.style.color = "green";
+    logMessage('✅ Login successful');
   } else {
-    msg.innerText = `❌ Login failed: ${data.detail}`;
-    msg.style.color = "red";
+    logMessage('❌ Login failed', 'error');
   }
 });
 
 // Access Protected
 document.getElementById('accessProtected').addEventListener('click', async () => {
-  const msg = document.getElementById('protectedMessage');
-
   const response = await fetch('http://127.0.0.1:8000/protected', {
     method: 'GET',
     headers: { 'Authorization': `Bearer ${accessToken}` }
   });
+  const data = await response.json();
+  if (response.ok) {
+    logMessage(`✅ Protected: ${JSON.stringify(data)}`);
+  } else {
+    logMessage(`❌ Protected failed: ${data.detail}`, 'error');
+  }
+});
+
+// Create Post
+document.getElementById('createPostForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const title = document.getElementById('postTitle').value;
+  const content = document.getElementById('postContent').value;
+  const response = await fetch('http://127.0.0.1:8000/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+    body: JSON.stringify({ title, content })
+  });
+  const data = await response.json();
+  if (response.ok) {
+    logMessage(`✅ Post created: ${JSON.stringify(data)}`);
+  } else {
+    logMessage(`❌ Post creation failed: ${data.detail}`, 'error');
+  }
+});
+
+// Update Post
+document.getElementById('updatePostForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const postId = document.getElementById('updatePostId').value;
+  const title = document.getElementById('updateTitle').value;
+  const content = document.getElementById('updateContent').value;
+  const response = await fetch(`http://127.0.0.1:8000/put/${postId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+    body: JSON.stringify({ title, content })
+  });
+  const data = await response.json();
+  if (response.ok) {
+    logMessage(`✅ Post updated: ${JSON.stringify(data)}`);
+  } else {
+    logMessage(`❌ Update failed: ${data.detail}`, 'error');
+  }
+});
+
+// Delete Post
+document.getElementById('deletePostForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const postId = document.getElementById('deletePostId').value;
+  const response = await fetch(`http://127.0.0.1:8000/posts/${postId}`, {
+  method: 'DELETE',
+  headers: { 'Authorization': `Bearer ${accessToken}` }
+});
 
   const data = await response.json();
-
   if (response.ok) {
-    msg.innerText = `✅ Protected message: ${data.message}`;
-    msg.style.color = "green";
+    logMessage(`✅ Post deleted: ${data.message}`);
   } else {
-    msg.innerText = `❌ Access failed: ${data.detail}`;
-    msg.style.color = "red";
+    logMessage(`❌ Delete failed: ${data.detail}`, 'error');
   }
 });
 
 // Refresh Token
 document.getElementById('refreshToken').addEventListener('click', async () => {
-  const msg = document.getElementById('refreshMessage');
-
   const response = await fetch('http://127.0.0.1:8000/refresh', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ refresh_token: refreshToken })
   });
-
   const data = await response.json();
-
   if (response.ok) {
     accessToken = data.access_token;
-    msg.innerText = "✅ Access token refreshed!";
-    msg.style.color = "green";
+    logMessage('✅ Token refreshed');
   } else {
-    msg.innerText = `❌ Refresh failed: ${data.detail}`;
-    msg.style.color = "red";
+    logMessage('❌ Token refresh failed', 'error');
   }
 });
 </script>
