@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends, Body
 import bcrypt
 from jose import jwt, JWTError
-from models import LoginRequest, RegisterRequest, RefreshTokenRequest, UserDB
+from models import UserDB
 from utils.auth_utils import create_access_token, verify_token, create_refresh_token, SECRET_KEY, ALGORITHM
 from sqlalchemy.orm import Session
 from database import get_db
+from schemas import LoginRequest, RegisterRequest, RefreshTokenRequest
 
 router = APIRouter()
 

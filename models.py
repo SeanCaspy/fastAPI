@@ -1,4 +1,4 @@
-from pydantic import Field, BaseModel
+from pydantic import BaseModel
 
 from database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
@@ -9,7 +9,7 @@ class UserDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, index=True)
     hashed_password = Column(String(255))
-
+    
 class PostDB(Base):
     __tablename__ = "posts"
     id = Column(Integer, primary_key=True, index=True)
@@ -18,21 +18,4 @@ class PostDB(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("UserDB", backref="posts")
-
-
-class RefreshTokenRequest(BaseModel):
-    refresh_token: str
-
-class RegisterRequest(BaseModel):
-    username: str
-    password: str
-
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-class PostCreate(BaseModel):
-    title: str
-    content: str
-
 

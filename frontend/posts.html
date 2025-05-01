@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Posts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #3a0ca3;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9a8;
+            --warning-color: #ff9f1c;
+            --danger-color: #e63946;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            background-image: radial-gradient(#e0e8ff 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 2rem;
+            width: 100%;
+            box-shadow: var(--box-shadow);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: white;
+            border-radius: 10px;
+        }
+        
+        nav {
+            background-color: white;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            margin: 2rem auto;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            max-width: 800px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        nav a:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        nav a i {
+            margin-right: 0.5rem;
+        }
+        
+        #logoutButton {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        #logoutButton:hover {
+            background-color: #d62828;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(230, 57, 70, 0.3);
+        }
+        
+        #logoutButton i {
+            margin-right: 0.5rem;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .posts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .post-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            text-align: left;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .post-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+        }
+        
+        .post-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .post-footer {
+            padding: 1rem 1.5rem;
+            background-color: rgba(67, 97, 238, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .post-meta {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .loader {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(67, 97, 238, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #d1d9e6;
+            margin-bottom: 1rem;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 1rem;
+            }
+            
+            nav a, #logoutButton {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .posts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>All Posts</h1>
+            <p>Discover and explore all available posts</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <nav>
+            <a href="/index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="/register.html"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="/login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="/create_post.html"><i class="fas fa-plus-circle"></i> Create Post</a>
+            <a href="/posts.html" class="active"><i class="fas fa-list"></i> All Posts</a>
+            <button id="logoutButton"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </nav>
+        
+        <div class="main-content">
+            <h2><i class="fas fa-newspaper"></i> Browse All Posts</h2>
+            <p>Read and discover content from our community</p>
+            
+            <div id="loading" class="empty-state">
+                <div class="loader"></div>
+                <p>Loading posts...</p>
+            </div>
+            
+            <div id="posts-container" class="posts-container">
+                <!-- Posts will be loaded here dynamically -->
+            </div>
+            
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h3>No Posts Found</h3>
+                <p>There are currently no posts to display.</p>
+                <a href="/create_post.html" class="btn">Create Your First Post</a>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Your Project. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        const accessToken = localStorage.getItem('accessToken');
+        
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = "login.html";
+        });
+
+        async function loadPosts() {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/posts");
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                let posts = await response.json();
+                
+                // Sort posts by ID in descending order (assuming newer posts have higher IDs)
+                // If your posts have a date/timestamp field, you could sort by that instead
+                posts.sort((a, b) => b.id - a.id);
+                
+                const container = document.getElementById("posts-container");
+                const loadingElement = document.getElementById("loading");
+                const emptyState = document.getElementById("empty-state");
+                
+                // Hide loading indicator
+                loadingElement.style.display = "none";
+                
+                if (posts && posts.length > 0) {
+                    posts.forEach(post => {
+                        const postCard = document.createElement("div");
+                        postCard.className = "post-card";
+                        
+                        // Truncate content if too long
+                        const truncatedContent = post.content.length > 150 
+                            ? post.content.substring(0, 150) + "..." 
+                            : post.content;
+                        
+                        postCard.innerHTML = `
+                            <div class="post-header">
+                                <h3>${post.title}</h3>
+                            </div>
+                            <div class="post-body">
+                                <p>${truncatedContent}</p>
+                            </div>
+                            <div class="post-footer">
+                                <div class="post-meta">
+                                    <p><i class="fas fa-user"></i> ${post.owner.username}</p>
+                                    <p><i class="fas fa-tag"></i> Post ID: ${post.id}</p>
+                                </div>
+                                <div class="post-actions">
+                                    <button class="action-btn" title="Edit" onclick="editPost(${post.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn" title="Delete" onclick="deletePost(${post.id})">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        container.appendChild(postCard);
+                    });
+                } else {
+                    // Show empty state
+                    emptyState.style.display = "block";
+                }
+            } catch (error) {
+                console.error("Error loading posts:", error);
+                document.getElementById("loading").innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--danger-color);"></i>
+                    <h3>Error Loading Posts</h3>
+                    <p>There was a problem loading the posts. Please try again later.</p>
+                `;
+            }
+        }
+
+        function editPost(postId) {
+            // Redirect to edit page with the post ID
+            window.location.href = `update_post.html?id=${postId}`;
+        }
+
+        function deletePost(postId) {
+            if (confirm("Are you sure you want to delete this post?")) {
+                // Here you would normally make a DELETE request to your API
+                console.log(`Deleting post with ID: ${postId}`);
+                // After successful deletion, reload the posts
+                // loadPosts();
+            }
+        }
+
+        // Load posts when the page loads
+        window.addEventListener('DOMContentLoaded', loadPosts);
+    </script>
+</body>
+</html>

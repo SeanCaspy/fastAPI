@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import PostDB, UserDB, PostCreate
+from models import PostDB, UserDB
 from database import get_db
 from utils.auth_utils import verify_token
+from typing import List
+from schemas import PostCreate, PostOut
 
 router = APIRouter()
 
@@ -17,7 +19,7 @@ def create_post(post: PostCreate, db: Session = Depends(get_db), user_id: int = 
     db.refresh(new_post)
     return {"message": "post created", "post_id": new_post.id}
 
-@router.get("/posts")
+@router.get("/posts", response_model=List[PostOut])
 def get_all_post(db: Session=Depends(get_db)):
     posts = db.query(PostDB).all()
     return posts

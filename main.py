@@ -14,7 +14,7 @@ users = []
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # אפשר לאפשר לכתובות ספציפיות במקום כוכבית בעתיד
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,122 +1,395 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Post</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    
-    h1 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    
-    form {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-    
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 100%;
-    }
-    
-    button:hover {
-      background-color: #45a049;
-    }
-    
-    .nav-links {
-      text-align: center;
-      margin-top: 20px;
-    }
-    
-    .nav-links a {
-      color: #4CAF50;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-    
-    .nav-links a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #3a0ca3;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9a8;
+            --warning-color: #ff9f1c;
+            --danger-color: #e63946;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            background-image: radial-gradient(#e0e8ff 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 2rem;
+            width: 100%;
+            box-shadow: var(--box-shadow);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: white;
+            border-radius: 10px;
+        }
+        
+        nav {
+            background-color: white;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            margin: 2rem auto;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            max-width: 800px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        nav a:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        nav a i {
+            margin-right: 0.5rem;
+        }
+        
+        #logoutButton {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        #logoutButton:hover {
+            background-color: #d62828;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(230, 57, 70, 0.3);
+        }
+        
+        #logoutButton i {
+            margin-right: 0.5rem;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        form {
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background-color: white;
+        }
+        
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.2);
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-group {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: var(--dark-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+        
+        footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .notification {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .notification.success {
+            background-color: rgba(76, 201, 168, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+        
+        .notification.error {
+            background-color: rgba(230, 57, 70, 0.1);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 1rem;
+            }
+            
+            nav a, #logoutButton {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Create New Post</h1>
-  
-  <form id="createPostForm">
-    <input type="text" id="title" placeholder="Title" required>
-    <textarea id="content" placeholder="Write your post content here..." required></textarea>
-    <button type="submit">Create Post</button>
-  </form>
-  
-  <div class="nav-links">
-    <a href="index.html">Back to Posts</a>
-  </div>
-
-  <script>
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-      window.location.href = "login.html";
-    }
+    <header>
+        <div class="container">
+            <h1>Create New Post</h1>
+            <p>Share your thoughts with the community</p>
+        </div>
+    </header>
     
-    document.getElementById('createPostForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const title = document.getElementById('title').value;
-      const content = document.getElementById('content').value;
-      
-      try {
-        const response = await fetch('http://127.0.0.1:8000/posts', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json', 
-            'Authorization': `Bearer ${accessToken}` 
-          },
-          body: JSON.stringify({ title, content })
+    <div class="container">
+        <nav>
+            <a href="/index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="/posts.html"><i class="fas fa-list"></i> All Posts</a>
+            <a href="/create_post.html" class="active"><i class="fas fa-plus-circle"></i> Create Post</a>
+            <a href="/update_post.html"><i class="fas fa-edit"></i> Update Post</a>
+            <a href="/delete_post.html"><i class="fas fa-trash-alt"></i> Delete Post</a>
+            <button id="logoutButton"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </nav>
+        
+        <div class="main-content">
+            <h2><i class="fas fa-pen"></i> Create Your Post</h2>
+            <p>Fill out the form below to create a new post</p>
+            
+            <div id="notification" class="notification"></div>
+            
+            <form id="createPostForm">
+                <div class="form-group">
+                    <label for="title">Post Title</label>
+                    <input type="text" id="title" placeholder="Enter a catchy title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Post Content</label>
+                    <textarea id="content" placeholder="Write your thoughts here..." required></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Publish Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Your Project. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        const accessToken = localStorage.getItem('accessToken');
+        
+        // Check for authentication
+        if (!accessToken) {
+            window.location.href = "login.html";
+        }
+        
+        // Logout button functionality
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = "login.html";
         });
         
-        const data = await response.json();
-        
-        if (response.ok) {
-          alert('Post created successfully!');
-          window.location.href = "index.html";
-        } else {
-          alert('Post creation failed: ' + data.detail);
+        // Show notification function
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
         }
-      } catch (error) {
-        alert('Error creating post: ' + error.message);
-      }
-    });
-  </script>
+        
+        // Form submission
+        document.getElementById('createPostForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            
+            try {
+                const response = await fetch('http://127.0.0.1:8000/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({ title, content })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('Post created successfully!', 'success');
+                    
+                    // Reset form
+                    document.getElementById('createPostForm').reset();
+                    
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = "posts.html";
+                    }, 1500);
+                } else {
+                    showNotification('Post creation failed: ' + (data.detail || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showNotification('Error creating post: ' + error.message, 'error');
+            }
+        });
+    </script>
 </body>
 </html>
