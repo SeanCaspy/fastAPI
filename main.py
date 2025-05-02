@@ -5,12 +5,13 @@ from routes import auth, posts
 from database import Base, engine
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from dotenv import load_dotenv
 
 app = FastAPI()
 
 users = []
 
-
+load_dotenv()
 
 app.add_middleware(
     CORSMiddleware,
