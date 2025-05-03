@@ -343,7 +343,7 @@
 
         async function loadPosts() {
             try {
-                const response = await fetch("http://127.0.0.1:8000/posts");
+                const response = await fetch("/posts");
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

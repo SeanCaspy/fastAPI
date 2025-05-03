@@ -328,7 +328,7 @@
             }
             
             try {
-                const response = await fetch(`http://127.0.0.1:8000/posts/${postId}`, {
+                const response = await fetch(`/posts/${postId}`, {
                     headers: { 'Authorization': `Bearer ${accessToken}` }
                 });
                 
@@ -353,7 +353,7 @@
             const content = document.getElementById('content').value;
             
             try {
-                const response = await fetch(`http://127.0.0.1:8000/posts/${postId}`, {
+                const response = await fetch(`/posts/${postId}`, {
                     method: 'PUT',
                     headers: { 
                         'Content-Type': 'application/json',
