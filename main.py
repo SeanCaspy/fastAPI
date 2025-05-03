@@ -4,10 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes import auth, posts
 from database import Base, engine
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 
 app = FastAPI()
+
+# @app.get("/", response_class=FileResponse)
+# def read_root():
+#     return "frontend/index.html"
 
 users = []
 
